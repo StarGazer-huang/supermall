@@ -26,5 +26,12 @@
 </script>
 
 <style scoped>
+  .goods{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    /*z-index: 7;*/
+  }
+
 
 </style>
