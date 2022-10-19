@@ -1,7 +1,12 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <scroll class="content" ref="scroll">
+    <scroll class="content"
+            ref="scroll"
+            :probe-type="3"
+            @scroll="contentScroll"
+            :pull-up-load="true"
+            @pullingUp="loadMore">
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
@@ -10,7 +15,7 @@
                    @tabClick="tabClick"></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
-    <back-top @click.native="backClick"></back-top>
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -39,7 +44,8 @@
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []}
         },
-        currentType: 'pop'
+        currentType: 'pop',
+        isShowBackTop: true
       }
     },
     computed: {
@@ -85,7 +91,17 @@
       backClick(){
         this.$refs.scroll.scrollTo(0, 0)
       },
+      contentScroll(position){
+        // console.log(position);
+        // position.y < 1000
+        this.isShowBackTop = -position.y > 1000
+      },
+      loadMore(){
+        // console.log("上拉加载更多");
+        this.getHomeGoods(this.currentType)
 
+        // this.$refs.scroll.scroll.refresh()
+      },
       //网络请求相关的代码
       getHomeMultidata(){
         getHomeMultidata().then(res => {
@@ -102,6 +118,8 @@
           // this.goods[type].list = res.data.list
           this.goods[type].list.push(...res.data.list)
           this.goods[type].list.page += 1
+
+          this.$refs.scroll.finishPullUp()
         })
       }
 
@@ -135,6 +153,7 @@
 
   .content{
     /*height: 300px;*/
+    height: calc(100% - 93px);
     overflow: hidden;
 
     position: absolute;
