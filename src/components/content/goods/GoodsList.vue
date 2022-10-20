@@ -19,6 +19,11 @@
         }
       }
     },
+    methods: {
+      // imageLoad() {
+      //   this.$emit('imageLoadFinish')
+      // }
+    },
     components: {
       GoodsListItem
     }

@@ -5,8 +5,7 @@
             ref="scroll"
             :probe-type="3"
             @scroll="contentScroll"
-            :pull-up-load="true"
-            @pullingUp="loadMore">
+            :pull-up-load="true">
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
@@ -31,6 +30,7 @@
   import BackTop from "../../components/content/backTop/BackTop";
 
   import {getHomeMultidata, getHomeGoods} from "../../network/home";
+  import mittBus from "../../mitt";
 
   export default {
     name: "Home",
@@ -72,6 +72,12 @@
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
+
+      //3.监听Item中图片加载完成
+      mittBus.on("itemImageLoad", () => {
+        // console.log("图片加载完成");
+        this.$refs.scroll.loadfinish()
+      })
     },
     methods: {
       //事件监听相关的代码
@@ -96,17 +102,14 @@
         // position.y < 1000
         this.isShowBackTop = -position.y > 1000
       },
-      loadMore(){
-        // console.log("上拉加载更多");
-        this.getHomeGoods(this.currentType)
-
-        // this.$refs.scroll.scroll.refresh()
-      },
+      // LoadFinish(){
+      //   // this.isLoadFinish = true
+      //   this.$refs.scroll.loadfinish()
+      //   console.log("所有图片均已加载完成");
+      // },
       //网络请求相关的代码
       getHomeMultidata(){
         getHomeMultidata().then(res => {
-          // console.log(res);
-          // this.result = res;
           this.banners = res.data.banner.list;
           this.recommends = res.data.recommend.list;
         })
@@ -119,7 +122,6 @@
           this.goods[type].list.push(...res.data.list)
           this.goods[type].list.page += 1
 
-          this.$refs.scroll.finishPullUp()
         })
       }
 

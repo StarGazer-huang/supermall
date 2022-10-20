@@ -15,11 +15,11 @@
       probeType: {
         type: Number,
         default: 0
-      },
-      pullUpLoad: {
-        type: Boolean,
-        default: false
       }
+      // pullUpLoad: {
+      //   type: Boolean,
+      //   default: false
+      // }
     },
     data(){
       return {
@@ -53,6 +53,9 @@
       },
       finishPullUp(){
         this.scroll.finishPullUp()
+      },
+      loadfinish(){
+        this.scroll.refresh()
       }
     }
   }
