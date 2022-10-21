@@ -5,13 +5,13 @@
             ref="scroll"
             :probe-type="3"
             @scroll="contentScroll"
-            :pull-up-load="true">
+            :pull-up-load="true" @pullingUp="loadMore">
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
-      <tab-control class="tab-control"
-                   :titles="['流行','新款','精选']"
-                   @tabClick="tabClick"></tab-control>
+      <tab-control :titles="['流行','新款','精选']"
+                   @tabClick="tabClick"
+                   ref="tabControl"></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
@@ -30,6 +30,8 @@
   import BackTop from "../../components/content/backTop/BackTop";
 
   import {getHomeMultidata, getHomeGoods} from "../../network/home";
+  import {debounce} from "../../components/common/utils";
+
   import mittBus from "../../mitt";
 
   export default {
@@ -45,7 +47,8 @@
           'sell': {page: 0, list: []}
         },
         currentType: 'pop',
-        isShowBackTop: true
+        isShowBackTop: true,
+      tabOffsetTop: 0
       }
     },
     computed: {
@@ -72,12 +75,17 @@
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
+    },
+    mounted() {
+      const refresh = debounce(this.$refs.scroll.loadfinish, 200)
 
-      //3.监听Item中图片加载完成
+      //监听Item中图片加载完成
       mittBus.on("itemImageLoad", () => {
-        // console.log("图片加载完成");
-        this.$refs.scroll.loadfinish()
+        // this.$refs.scroll && this.$refs.scroll.loadfinish()
+        refresh()
       })
+      //获取tabControl的offsetTop
+      console.log(this.$refs.tabControl.offsetTop);
     },
     methods: {
       //事件监听相关的代码
@@ -102,6 +110,10 @@
         // position.y < 1000
         this.isShowBackTop = -position.y > 1000
       },
+      loadMore(){
+        // console.log('加载更多');
+        this.getHomeGoods(this.currentType)
+      },
       // LoadFinish(){
       //   // this.isLoadFinish = true
       //   this.$refs.scroll.loadfinish()
@@ -122,6 +134,8 @@
           this.goods[type].list.push(...res.data.list)
           this.goods[type].list.page += 1
 
+          //完成上拉加载更多
+          this.$refs.scroll.finishPullUp()
         })
       }
 
@@ -147,11 +161,11 @@
     z-index: 9;
   }
 
-  .tab-control{
-    position: sticky;
-    top: 44px;
-    z-index: 8;
-  }
+  /*.tab-control{*/
+  /*  position: sticky;*/
+  /*  top: 44px;*/
+  /*  z-index: 8;*/
+  /*}*/
 
   .content{
     /*height: 300px;*/

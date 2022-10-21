@@ -8,6 +8,9 @@
 
 <script>
   import BScroll from "better-scroll"
+  // import ObserveDOM from '@better-scroll/observe-dom'
+
+  // BScroll.use(ObserveDOM)
 
   export default {
     name: "Scroll",
@@ -15,11 +18,11 @@
       probeType: {
         type: Number,
         default: 0
+      },
+      pullUpLoad: {
+        type: Boolean,
+        default: false
       }
-      // pullUpLoad: {
-      //   type: Boolean,
-      //   default: false
-      // }
     },
     data(){
       return {
@@ -46,16 +49,28 @@
         // console.log("上拉加载更多");
         this.$emit('pullingUp')
       })
+
+      // if (this.probeType === 2 || this.probeType === 3){
+      //   this.$emit('scroll', position)
+      // }
+
+      //4.监听scroll滚动到底部
+      if(this.pullUpLoad){
+        this.scroll.on('pullingUp', () => {
+          this.$emit('pullingUp')
+        })
+      }
     },
     methods: {
       scrollTo(x, y, time=3000){
-        this.scroll.scrollTo(x, y, time)
+        this.scroll && this.scroll.scrollTo(x, y, time)
       },
       finishPullUp(){
-        this.scroll.finishPullUp()
+        this.scroll && this.scroll.finishPullUp()
       },
       loadfinish(){
-        this.scroll.refresh()
+        console.log('------');
+        this.scroll && this.scroll.refresh()
       }
     }
   }
