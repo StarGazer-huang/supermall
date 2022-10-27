@@ -93,15 +93,20 @@
     },
     deactivated() {
       // console.log('deactivated');
+      //1.保存Y值
       this.saveY = this.$refs.scroll.getScrollY()
+
+
+      //2.取消全局事件的监听
+      mittBus.off('itemImageLoad', this.itemImageListener)
     },
     mounted() {
       //1.监听Item中图片加载完成
       const refresh = debounce(this.$refs.scroll.loadfinish, 200)
-      mittBus.on("itemImageLoad", () => {
-        // this.$refs.scroll && this.$refs.scroll.loadfinish()
+      mittBus.on("homeItemImageLoad", () => {
         refresh()
       })
+      // this.$refs.scroll && this.$refs.scroll.loadfinish()
 
       //2.获取tabControl的offsetTop
       //所有的组件都有一个属性$el: 用于获取组件中的元素
@@ -157,7 +162,7 @@
       getHomeGoods(type){
         const page = this.goods[type].page + 1
         getHomeGoods(type,page).then(res => {
-          console.log(res);
+          // console.log(res);
           // this.goods[type].list = res.data.list
           this.goods[type].list.push(...res.data.list)
           this.goods[type].list.page += 1

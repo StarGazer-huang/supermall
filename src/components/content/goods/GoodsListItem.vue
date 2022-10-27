@@ -28,7 +28,14 @@
       //   this.$emit('imageLoadFinish')
       // }
       imageLoad(){
-        mittBus.emit('itemImageLoad')
+        // mittBus.emit('itemImageLoad')
+
+        if (this.$route.path.indexOf('/home') != -1){
+          mittBus.emit('homeItemImageLoad')
+        }else if(this.$route.path.indexOf('/detail') != -1){
+          mittBus.emit('detailItemImageLoad')
+          // console.log("这个事件被触发了");
+        }
       },
       itemClick(){
         // console.log("跳转到详情页");

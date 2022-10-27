@@ -26,6 +26,9 @@
   import Scroll from "../../components/common/scroll/Scroll";
 
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from "../../network/detail";
+  import {debounce} from "../../common/utils";
+
+  import mittBus from "../../mitt";
 
   export default {
     name: "Detail",
@@ -83,8 +86,15 @@
 
       //3.请求推荐数据
       getRecommend().then(res => {
-        console.log(res);
+        // console.log(res);
         this.recommends = res.data.list
+      })
+    },
+    mounted() {
+      const refresh = debounce(this.$refs.scroll.loadfinish, 200)
+      mittBus.on("detailItemImageLoad", () => {
+        refresh()
+        // console.log("所有图片均已加载完毕");
       })
     },
     methods: {
