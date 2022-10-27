@@ -110,6 +110,7 @@
 
       //2.获取tabControl的offsetTop
       //所有的组件都有一个属性$el: 用于获取组件中的元素
+      // console.log(this.$refs.tabControl);
     },
     methods: {
       //事件监听相关的代码
@@ -149,6 +150,7 @@
       // LoadFinish(){
       //   // this.isLoadFinish = true
       //   this.$refs.scroll.loadfinish()
+      //   console.log("所有图片均已加载完成");
       // },
       //网络请求相关的代码
       getHomeMultidata(){
@@ -160,6 +162,7 @@
       getHomeGoods(type){
         const page = this.goods[type].page + 1
         getHomeGoods(type,page).then(res => {
+          // console.log(res);
           // this.goods[type].list = res.data.list
           this.goods[type].list.push(...res.data.list)
           this.goods[type].list.page += 1
@@ -183,6 +186,7 @@
     /*background-color: #ff8198;*/
     background-color: var(--color-tint);
     color: white;
+
   }
 
   .tab-control{
