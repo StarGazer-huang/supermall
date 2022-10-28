@@ -144,6 +144,7 @@
         this.getHomeGoods(this.currentType)
       },
       swiperImageLoad(){
+        console.log("swiperImageLoad");
         // console.log(this.$refs.tabControl.$el.offsetTop);
         this.tabOffsetTop = this.$refs.tabControlTwo.$el.offsetTop
       },
