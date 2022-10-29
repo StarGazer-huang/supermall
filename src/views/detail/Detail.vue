@@ -1,7 +1,7 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick="titleClick"/>
-    <scroll class="content" ref="scroll">
+    <scroll class="content" ref="scroll" @scroll="detailScroll">
       <detail-swiper :top-images="topImages"/>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
@@ -144,6 +144,9 @@
       titleClick(index){
         // console.log(index);
         this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 100)
+      },
+      detailScroll(position) {
+        console.log(position);
       }
     }
   }
