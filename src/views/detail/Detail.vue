@@ -142,7 +142,7 @@
         this.getThemeTopY()
       },
       titleClick(index){
-        console.log(index);
+        // console.log(index);
         this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 100)
       }
     }
