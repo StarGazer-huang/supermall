@@ -1,7 +1,9 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @titleClick="titleClick"/>
-    <scroll class="content" ref="scroll" @scroll="detailScroll">
+    <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="nav"/>
+    <scroll class="content"
+            ref="scroll"
+            :probe-type="3" @scroll="contentScroll">
       <detail-swiper :top-images="topImages"/>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
@@ -10,6 +12,7 @@
       <detail-comment-info ref="comment" :comment-info="commentInfo"/>
       <goods-list ref="recommend" :goods="recommends"/>
     </scroll>
+    <detail-botton-bar/>
   </div>
 </template>
 
@@ -21,6 +24,7 @@
   import DetailGoodsInfo from "./childComponents/DetailGoodsInfo";
   import DetailParamInfo from "./childComponents/DetailParamInfo";
   import DetailCommentInfo from "./childComponents/DetailCommentInfo";
+  import DetailBottonBar from "./childComponents/DetailBottonBar";
   import GoodsList from "../../components/content/goods/GoodsList";
 
   import Scroll from "../../components/common/scroll/Scroll";
@@ -40,6 +44,7 @@
       DetailShopInfo,
       DetailParamInfo,
       DetailCommentInfo,
+      DetailBottonBar,
       GoodsList,
       Scroll
     },
@@ -54,7 +59,8 @@
         commentInfo: {},
         recommends: [],
         themeTopYs: [],
-        getThemeTopY: null
+        getThemeTopY: null,
+        currentIndex: 0
       }
     },
     created() {
@@ -125,6 +131,7 @@
         this.themeTopYs.push(this.$refs.params.$el.offsetTop)
         this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
         this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
+        this.themeTopYs.push(Number.MAX_VALUE)
       }, 100)
     },
     mounted() {
@@ -143,10 +150,26 @@
       },
       titleClick(index){
         // console.log(index);
-        this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 100)
+        this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200)
       },
-      detailScroll(position) {
-        console.log(position);
+      contentScroll(position) {
+        // console.log(position);
+        const positionY = -position.y
+        let length = this.themeTopYs.length
+        for(let i = 0; i < length-1; i++){
+          if(this.currentIndex !== i && (positionY >= this.themeTopYs[i]
+          && this.themeTopYs[i] && positionY < this.themeTopYs[i+1])){
+            this.currentIndex = i;
+            this.$refs.nav.currentIndex = this.currentIndex
+          }
+          // if(this.currentIndex !== i && ((i < length - 1 && positionY >= this.themeTopYs[i]
+          //   && positionY < this.themeTopYs[i + 1]) || (i == length -1
+          //   && positionY >= this.themeTopYs[i]))){
+          //   this.currentIndex = i;
+          //   console.log(this.currentIndex);
+          //   this.$refs.nav.currentIndex = this.currentIndex
+          // }
+        }
       }
     }
   }
