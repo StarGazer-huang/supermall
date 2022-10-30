@@ -1,5 +1,5 @@
 <template>
-  <div class="button-bar">
+  <div class="bottom-bar">
     <div class="bar-item bar-left">
       <div>
         <i class="icon service"></i>
@@ -14,7 +14,7 @@
         <span class="text">收藏</span>
       </div>
     </div>
-    <div class="bat-item bar-right">
+    <div class="bar-item bar-right">
       <div class="cart">加入购物车</div>
       <div class="buy">购买</div>
     </div>
@@ -30,8 +30,8 @@
 </script>
 
 <style scoped>
-  .button-bar{
-    height: 49px;
+  .bottom-bar{
+    height: 58px;
     background-color: #fff;
 
     position: relative;
@@ -53,10 +53,6 @@
   }
 
   .bar-item>div{
-    flex: 1;
-  }
-
-  .bat-item>div{
     flex: 1;
   }
 
@@ -94,5 +90,4 @@
   .bar-right .buy{
     background-color: #f69;
   }
-
 </style>
