@@ -12,7 +12,8 @@
       <detail-comment-info ref="comment" :comment-info="commentInfo"/>
       <goods-list ref="recommend" :goods="recommends"/>
     </scroll>
-    <detail-botton-bar/>
+    <detail-botton-bar @addCart="addToCart"/>
+    <back-top @click.native="backClick" v-show="isShowBackTop"/>
   </div>
 </template>
 
@@ -24,10 +25,11 @@
   import DetailGoodsInfo from "./childComponents/DetailGoodsInfo";
   import DetailParamInfo from "./childComponents/DetailParamInfo";
   import DetailCommentInfo from "./childComponents/DetailCommentInfo";
-  import DetailBottonBar from "./childComponents/DetailBottonBar";
-  import GoodsList from "../../components/content/goods/GoodsList";
+  import DetailBottonBar from "./childComponents/DetailButtonBar";
 
   import Scroll from "../../components/common/scroll/Scroll";
+  import GoodsList from "../../components/content/goods/GoodsList";
+  import BackTop from "../../components/content/backTop/BackTop";
 
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from "../../network/detail";
   import {debounce} from "../../common/utils";
@@ -46,6 +48,7 @@
       DetailCommentInfo,
       DetailBottonBar,
       GoodsList,
+      BackTop,
       Scroll
     },
     data(){
@@ -60,7 +63,8 @@
         recommends: [],
         themeTopYs: [],
         getThemeTopY: null,
-        currentIndex: 0
+        currentIndex: 0,
+        isShowBackTop: false
       }
     },
     created() {
@@ -170,6 +174,24 @@
           //   this.$refs.nav.currentIndex = this.currentIndex
           // }
         }
+        //3.是否显示回到顶部
+        this.isShowBackTop = -position.y > 1000
+      },
+      backClick(){
+        this.$refs.scroll.scrollTo(0, 0)
+      },
+      addToCart(){
+        //1.获取购物车需要展示的信息
+        const product = {}
+        product.image = this.topImages[0];
+        product.title = this.goods.title;
+        product.desc = this.goods.desc;
+        product.price = this.goods.realPrice;
+        product.iid = this.iid;
+
+        //2.将商品添加到购物车中
+        // this.$store.commit('addCart', product)
+        this.$store.dispatch('addCart', product)
       }
     }
   }
@@ -190,6 +212,6 @@
   }
 
   .content{
-    height: calc(100% - 44px);
+    height: calc(100% - 44px - 58px);
   }
 </style>

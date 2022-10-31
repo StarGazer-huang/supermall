@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="bar-item bar-right">
-      <div class="cart">加入购物车</div>
+      <div class="cart" @click="addToCart">加入购物车</div>
       <div class="buy">购买</div>
     </div>
   </div>
@@ -25,7 +25,12 @@
   import DetailCommentInfo from "./DetailCommentInfo";
   export default {
     name: "DetailBottonBar",
-    components: {DetailCommentInfo}
+    components: {DetailCommentInfo},
+    methods: {
+      addToCart(){
+        this.$emit('addCart')
+      }
+    }
   }
 </script>
 
@@ -35,7 +40,7 @@
     background-color: #fff;
 
     position: relative;
-    bottom: 49px;
+    /*bottom: 58px*/
 
     display: flex;
     text-align: center;
