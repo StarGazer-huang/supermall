@@ -56,6 +56,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-right: 5px;
   }
 
   .item-title, .item-desc{

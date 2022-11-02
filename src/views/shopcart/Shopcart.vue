@@ -4,17 +4,19 @@
       <!--导航-->
       <div slot="center">购物车({{cartLength}})</div>
     </nav-bar>
+
     <!--商品的列表-->
     <cart-list></cart-list>
+
     <!--底部汇总-->
+    <cart-button-bar></cart-button-bar>
   </div>
 </template>
 
 <script>
   import NavBar from "../../components/common/navbar/NavBar";
   import CartList from "./childComps/CartList";
-
-  import Scroll from "../../components/common/scroll/Scroll";
+  import CartButtonBar from "./childComps/CartButtonBar";
 
   import {mapGetters} from "vuex"
 
@@ -23,7 +25,7 @@
     components: {
       NavBar,
       CartList,
-      Scroll
+      CartButtonBar
     },
     computed: {
       ...mapGetters(['cartLength'])
