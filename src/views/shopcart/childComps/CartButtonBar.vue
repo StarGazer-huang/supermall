@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-bar">
     <div class="check-content">
-      <check-button @click.native=checkClick""
+      <check-button @click.native="checkClick"
                     :is-checked="isSelectAll"
                     class="check-button"/>
       <span>全选</span>
@@ -11,7 +11,7 @@
       合计:{{totalPrice}}
     </div>
 
-    <div class="calculate">
+    <div @click="calcClick" class="calculate">
       去计算({{checkLength}})
     </div>
   </div>
@@ -53,6 +53,11 @@
           this.cartList.forEach(item => item.checked = false)
         }else {
           this.cartList.forEach(item => item.checked = true)
+        }
+      },
+      calcClick(){
+        if (!this.isSelectAll){
+          this.$toast.show("请选择购买的商品", 2000)
         }
       }
     }

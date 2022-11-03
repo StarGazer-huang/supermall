@@ -14,6 +14,7 @@
     </scroll>
     <detail-botton-bar @addCart="addToCart"/>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
+<!--    <toast :message="message" :is-show="isShow"/>-->
   </div>
 </template>
 
@@ -33,8 +34,11 @@
 
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from "../../network/detail";
   import {debounce} from "../../common/utils";
+  import {mapActions} from "vuex"
 
   import mittBus from "../../mitt";
+
+  // import Toast from "../../components/common/toast/Toast";
 
   export default {
     name: "Detail",
@@ -49,6 +53,7 @@
       DetailBottonBar,
       GoodsList,
       BackTop,
+      // Toast,
       Scroll
     },
     data(){
@@ -64,7 +69,9 @@
         themeTopYs: [],
         getThemeTopY: null,
         currentIndex: 0,
-        isShowBackTop: false
+        isShowBackTop: false,
+        // message: "添加购物车成功",
+        // isShow: false
       }
     },
     created() {
@@ -147,6 +154,7 @@
 
     },
     methods: {
+      ...mapActions(['addCart']),
       imageLoad(){
         // console.log("image函数被调用, 说明此时所有图片均已加载完毕");
         this.$refs.scroll.finishPullUp()
@@ -191,7 +199,16 @@
 
         //2.将商品添加到购物车中
         // this.$store.commit('addCart', product)
-        this.$store.dispatch('addCart', product)
+        this.addCart(product).then(res => {
+          this.$toast.show(res, 2000)
+        })
+        // this.$store.dispatch('addCart', product).then(res => {
+        //   console.log(res);
+        //   this.isShow = true;
+        //   setTimeout(() => {
+        //     this.isShow = false
+        //   }, 1000)
+        // })
       }
     }
   }
